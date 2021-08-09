@@ -10,7 +10,7 @@ export default function PokemonProvider({children}){
     const [hasError,setHasError] = useState(false);
     const[errorMessage,setErrorMessage] = useState("");
 
-    const getPokemon = async () => {
+    const getPokemons = async () => {
         try {
             setIsLoading(true);
             setHasError(false);
@@ -41,7 +41,7 @@ export default function PokemonProvider({children}){
     };
     return(
         <PokemonContext.Provider value = {{
-            getPokemon, pokemons,
+            getPokemons, pokemons,
             getPokemonDetail, pokemonDetail, errorMessage,
             isLoading,hasError}}>
             {children}
