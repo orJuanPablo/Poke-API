@@ -1,10 +1,14 @@
 import { useParams } from "react-router-dom";
 import { useContext, useEffect } from "react";
 import PokemonContext from "../../context/pokemons";
+import PokeStats from "./components/PokeStats.js";
+import Loading from "../../components/Loading";
+import ErrorMessage from "../../components/ErrorMessage";
+
 
 export default function PokeDetail(){
     const {id} = useParams();
-    const {getPokemonDetail, pokemonDetail, isLoading} = useContext(PokemonContext);
+    const {getPokemonDetail, pokemonDetail, isLoading, hasError, errorMessage} = useContext(PokemonContext);
     
     useEffect(() => {
         /**
@@ -14,12 +18,18 @@ export default function PokeDetail(){
         */
         getPokemonDetail(id).catch(null);
     },[]);
-    if(isLoading) return (<p>Cargando pokemon...</p>);
+    if(isLoading) return <Loading title="cargando pokemon..." />;
     return (
         <div>
-            <p>{`Nombre : ${pokemonDetail?.name}`}</p>
-            <p>{`Peso : ${pokemonDetail?.weight} kgs.`}</p>
-            <p>{`Altura : ${pokemonDetail?.height} cms.`}</p>
+            {hasError ? <ErrorMessage message={errorMessage} /> : (
+                <>
+                    <p>{`Nombre : ${pokemonDetail?.name}`}</p>
+                    <p>{`Peso : ${pokemonDetail?.weight} Libras`}</p>
+                    <p>{`Altura : ${pokemonDetail?.height} Pies`}</p>
+                    <PokeStats stats={pokemonDetail?.stats ?? []}/>
+                </>
+            )}
+            
         </div>
     );
 }
